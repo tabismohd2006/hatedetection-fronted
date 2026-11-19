@@ -1,1 +1,245 @@
+
 @import "tailwindcss";
+
+/* ==============================
+   GLOBAL BASE STYLES
+============================== */
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+html {
+  color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
+body {
+  background-color: #faf9ff;
+  color: #111827;
+  transition: background-color 220ms ease, color 220ms ease;
+}
+
+/* ==============================
+   PREMIUM DARK PURPLE THEME
+============================== */
+
+html.dark body {
+  background-color: #100d1c;
+  color: #f5f3ff;
+}
+
+/* Main surfaces */
+html.dark .bg-white {
+  background-color: #191528 !important;
+}
+
+html.dark .bg-gray-50 {
+  background-color: #141120 !important;
+}
+
+html.dark .bg-gray-100 {
+  background-color: #211b32 !important;
+}
+
+/* Text */
+html.dark .text-gray-950,
+html.dark .text-gray-900,
+html.dark .text-gray-800,
+html.dark .text-gray-700 {
+  color: #f5f3ff !important;
+}
+
+html.dark .text-gray-600 {
+  color: #d1c9e2 !important;
+}
+
+html.dark .text-gray-500 {
+  color: #aaa0c2 !important;
+}
+
+/* Borders */
+html.dark .border-gray-100,
+html.dark .border-gray-200,
+html.dark .border-gray-300 {
+  border-color: #332a46 !important;
+}
+
+html.dark .border-purple-100,
+html.dark .border-purple-200 {
+  border-color: #3d2a56 !important;
+}
+
+/* Purple-tinted cards */
+html.dark .bg-purple-50 {
+  background-color: #21172f !important;
+}
+
+html.dark .bg-purple-100 {
+  background-color: #302044 !important;
+}
+
+/* Inputs and text areas */
+html.dark input,
+html.dark textarea,
+html.dark select {
+  background-color: #171325;
+  color: #f5f3ff;
+  border-color: #403451;
+}
+
+html.dark input::placeholder,
+html.dark textarea::placeholder {
+  color: #a79bbd;
+}
+
+/* Keep fields readable when focused */
+html.dark input:focus,
+html.dark textarea:focus,
+html.dark select:focus {
+  border-color: #a855f7;
+  outline-color: #a855f7;
+}
+
+/* Subtle shadows for dark surfaces */
+html.dark .shadow,
+html.dark .shadow-sm,
+html.dark .shadow-md,
+html.dark .shadow-lg,
+html.dark .shadow-xl {
+  --tw-shadow-color: rgb(0 0 0 / 20%);
+}
+
+/* Smooth theme changes without affecting every property */
+body,
+body * {
+  transition-property: background-color, border-color, color, box-shadow;
+  transition-duration: 180ms;
+  transition-timing-function: ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body,
+  body * {
+    transition-duration: 0ms;
+  }
+}
+
+/* ===== Dark Mode Visual Fixes ===== */
+
+/* Navbar and footer */
+html.dark nav,
+html.dark header,
+html.dark footer {
+  background-color: #151122 !important;
+  color: #f5f3ff !important;
+  border-color: #302542 !important;
+}
+
+/* Brand and navigation links */
+html.dark nav a,
+html.dark header a {
+  color: #ddd6fe;
+}
+
+html.dark nav a:hover,
+html.dark header a:hover {
+  color: #c084fc;
+}
+
+/* Preserve active navigation highlight */
+html.dark nav a.bg-purple-50,
+html.dark header a.bg-purple-50 {
+  background-color: #2a1c40 !important;
+  color: #c084fc !important;
+}
+
+/* Purple content panels — remove unwanted grey look */
+html.dark .bg-purple-50,
+html.dark .bg-purple-100 {
+  background-color: #241832 !important;
+}
+
+/* Improve text visibility */
+html.dark .text-purple-600,
+html.dark .text-purple-700,
+html.dark .text-purple-800 {
+  color: #c084fc !important;
+}
+
+/* Cards */
+html.dark .bg-white {
+  background-color: #191528 !important;
+}
+
+/* Avoid bright white glow around cards */
+html.dark .shadow-xl,
+html.dark .shadow-lg {
+  --tw-shadow: 0 12px 32px 0 rgb(0 0 0 / 25%);
+}
+
+/* Keep primary purple buttons vivid */
+html.dark .bg-purple-600,
+html.dark .bg-purple-700 {
+  background-color: #9333ea !important;
+  color: #ffffff !important;
+}
+
+/* Fix light backgrounds and faded text in dark mode */
+
+html.dark section {
+  color: #f5f3ff;
+}
+
+/* Common light gradient backgrounds */
+html.dark .bg-gradient-to-b,
+html.dark .bg-gradient-to-br,
+html.dark .bg-gradient-to-r,
+html.dark .bg-gradient-to-l {
+  background-color: #100d1c;
+}
+
+/* How It Works and other light panels */
+html.dark section.bg-white,
+html.dark section.bg-gray-50,
+html.dark section.bg-purple-50 {
+  background-color: #151122 !important;
+}
+
+/* Headings */
+html.dark section h1,
+html.dark section h2,
+html.dark section h3,
+html.dark section h4 {
+  color: #f5f3ff;
+}
+
+/* Paragraphs and descriptions */
+html.dark section p {
+  color: #c4b5d8;
+}
+
+/* Small purple labels */
+html.dark section .text-purple-500,
+html.dark section .text-purple-600,
+html.dark section .text-purple-700 {
+  color: #c084fc !important;
+}
+
+/* Keep feature cards dark */
+html.dark section .bg-white,
+html.dark section .bg-gray-50 {
+  background-color: #1b162a !important;
+}
+
+/* Preserve primary CTA colors */
+html.dark section .bg-purple-600,
+html.dark section .bg-purple-700 {
+  background-color: #9333ea !important;
+  color: #ffffff !important;
+}

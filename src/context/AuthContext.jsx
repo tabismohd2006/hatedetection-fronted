@@ -1,24 +1,31 @@
+
 import { createContext, useState } from "react";
 
 export const AuthContext = createContext();
 
-const AuthProvider = ({ children }) => {
+const getStoredUser = () => {
+  try {
+    const storedUser = localStorage.getItem("user");
+    return storedUser ? JSON.parse(storedUser) : null;
+  } catch (error) {
+    console.error("Unable to restore user session:", error);
+    localStorage.removeItem("user");
+    return null;
+  }
+};
 
-  const [user, setUser] = useState(
-    JSON.parse(localStorage.getItem("user")) || null
-  );
+const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(getStoredUser);
 
   const login = (userData, token) => {
     localStorage.setItem("user", JSON.stringify(userData));
     localStorage.setItem("token", token);
-
     setUser(userData);
   };
 
   const logout = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
-
     setUser(null);
   };
 
