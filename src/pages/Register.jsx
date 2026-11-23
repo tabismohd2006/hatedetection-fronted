@@ -1,5 +1,5 @@
-
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import {
   ShieldCheck,
   User,
@@ -7,8 +7,31 @@ import {
   Lock,
   ArrowRight,
 } from "lucide-react";
+import API from "../services/api";
 
 function Register() {
+  const navigate = useNavigate();
+  const [form, setForm] = useState({ name: "", email: "", password: "" });
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.id]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      setLoading(true);
+      await API.post("/auth/register", form);
+      alert("Registered successfully. Please login.");
+      navigate("/login");
+    } catch (error) {
+      alert(error.response?.data?.message || "Registration failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#FAF9FF] flex items-center justify-center px-4 py-10">
       <div className="w-full max-w-md">
@@ -49,7 +72,7 @@ function Register() {
             </p>
           </div>
 
-          <form className="space-y-5">
+          <form className="space-y-5" onSubmit={handleSubmit}>
 
             {/* Name */}
             <div>
@@ -69,6 +92,8 @@ function Register() {
                   placeholder="Enter your name"
                   autoComplete="name"
                   className="w-full pl-11 pr-4 py-3.5 rounded-xl bg-gray-50 text-gray-900 border border-gray-200 outline-none transition focus:bg-white focus:border-purple-500 focus:ring-4 focus:ring-purple-100 placeholder:text-gray-400"
+                  value={form.name}
+                  onChange={handleChange}
                   required
                 />
               </div>
@@ -92,6 +117,8 @@ function Register() {
                   placeholder="Enter your email"
                   autoComplete="email"
                   className="w-full pl-11 pr-4 py-3.5 rounded-xl bg-gray-50 text-gray-900 border border-gray-200 outline-none transition focus:bg-white focus:border-purple-500 focus:ring-4 focus:ring-purple-100 placeholder:text-gray-400"
+                  value={form.email}
+                  onChange={handleChange}
                   required
                 />
               </div>
@@ -115,6 +142,8 @@ function Register() {
                   placeholder="Create a password"
                   autoComplete="new-password"
                   className="w-full pl-11 pr-4 py-3.5 rounded-xl bg-gray-50 text-gray-900 border border-gray-200 outline-none transition focus:bg-white focus:border-purple-500 focus:ring-4 focus:ring-purple-100 placeholder:text-gray-400"
+                  value={form.password}
+                  onChange={handleChange}
                   required
                 />
               </div>
@@ -123,9 +152,10 @@ function Register() {
             {/* Submit */}
             <button
               type="submit"
-              className="w-full flex items-center justify-center gap-2 bg-purple-600 text-white py-3.5 rounded-xl font-semibold shadow-lg shadow-purple-200 transition hover:bg-purple-700 hover:shadow-xl active:scale-[0.99]"
+              disabled={loading}
+              className="w-full flex items-center justify-center gap-2 bg-purple-600 text-white py-3.5 rounded-xl font-semibold shadow-lg shadow-purple-200 transition hover:bg-purple-700 hover:shadow-xl active:scale-[0.99] disabled:opacity-60"
             >
-              Create Account
+              {loading ? "Creating..." : "Create Account"}
               <ArrowRight className="w-5 h-5" />
             </button>
 
