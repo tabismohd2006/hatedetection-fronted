@@ -6,27 +6,46 @@ import {
   Mail,
   Lock,
   ArrowRight,
+  LoaderCircle,
 } from "lucide-react";
-import API from "../services/api";
+
+import api from "../services/api";
 
 function Register() {
   const navigate = useNavigate();
-  const [form, setForm] = useState({ name: "", email: "", password: "" });
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.id]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
+
+    setError("");
+    setSuccess("");
+    setLoading(true);
+
     try {
-      setLoading(true);
-      await API.post("/auth/register", form);
-      alert("Registered successfully. Please login.");
-      navigate("/login");
-    } catch (error) {
-      alert(error.response?.data?.message || "Registration failed");
+      const res = await api.post("/auth/register", {
+        name,
+        email,
+        password,
+      });
+
+      setSuccess(res.data.message || "Registration Successful");
+
+      // Registration does not return a token.
+      // Redirect to login so the user can sign in.
+      setTimeout(() => {
+        navigate("/login");
+      }, 1200);
+    } catch (err) {
+      setError(
+        err.response?.data?.message || "Registration Failed. Please try again."
+      );
     } finally {
       setLoading(false);
     }
@@ -56,7 +75,7 @@ function Register() {
         </Link>
 
         {/* Register Card */}
-        <div className="w-full bg-white border border-purple-100 rounded-3xl shadow-xl shadow-purple-100/60 p-6 sm:p-9">
+        <div className="bg-white border border-purple-100 rounded-3xl shadow-xl shadow-purple-100/60 p-6 sm:p-9">
 
           <div className="text-center mb-8">
             <div className="w-14 h-14 mx-auto mb-4 rounded-2xl bg-purple-50 flex items-center justify-center">
@@ -72,12 +91,12 @@ function Register() {
             </p>
           </div>
 
-          <form className="space-y-5" onSubmit={handleSubmit}>
+          <form onSubmit={handleRegister} className="space-y-5">
 
             {/* Name */}
             <div>
               <label
-                htmlFor="name"
+                htmlFor="register-name"
                 className="block text-sm font-semibold text-gray-700 mb-2"
               >
                 Full Name
@@ -87,13 +106,13 @@ function Register() {
                 <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-purple-400" />
 
                 <input
-                  id="name"
+                  id="register-name"
                   type="text"
                   placeholder="Enter your name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
                   autoComplete="name"
                   className="w-full pl-11 pr-4 py-3.5 rounded-xl bg-gray-50 text-gray-900 border border-gray-200 outline-none transition focus:bg-white focus:border-purple-500 focus:ring-4 focus:ring-purple-100 placeholder:text-gray-400"
-                  value={form.name}
-                  onChange={handleChange}
                   required
                 />
               </div>
@@ -102,7 +121,7 @@ function Register() {
             {/* Email */}
             <div>
               <label
-                htmlFor="email"
+                htmlFor="register-email"
                 className="block text-sm font-semibold text-gray-700 mb-2"
               >
                 Email Address
@@ -112,13 +131,13 @@ function Register() {
                 <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-purple-400" />
 
                 <input
-                  id="email"
+                  id="register-email"
                   type="email"
                   placeholder="Enter your email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   autoComplete="email"
                   className="w-full pl-11 pr-4 py-3.5 rounded-xl bg-gray-50 text-gray-900 border border-gray-200 outline-none transition focus:bg-white focus:border-purple-500 focus:ring-4 focus:ring-purple-100 placeholder:text-gray-400"
-                  value={form.email}
-                  onChange={handleChange}
                   required
                 />
               </div>
@@ -127,7 +146,7 @@ function Register() {
             {/* Password */}
             <div>
               <label
-                htmlFor="password"
+                htmlFor="register-password"
                 className="block text-sm font-semibold text-gray-700 mb-2"
               >
                 Password
@@ -137,26 +156,54 @@ function Register() {
                 <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-purple-400" />
 
                 <input
-                  id="password"
+                  id="register-password"
                   type="password"
                   placeholder="Create a password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   autoComplete="new-password"
                   className="w-full pl-11 pr-4 py-3.5 rounded-xl bg-gray-50 text-gray-900 border border-gray-200 outline-none transition focus:bg-white focus:border-purple-500 focus:ring-4 focus:ring-purple-100 placeholder:text-gray-400"
-                  value={form.password}
-                  onChange={handleChange}
                   required
                 />
               </div>
             </div>
 
+            {/* API feedback */}
+            {error && (
+              <div
+                role="alert"
+                className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+              >
+                {error}
+              </div>
+            )}
+
+            {success && (
+              <div
+                role="status"
+                className="rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700"
+              >
+                {success} Redirecting to login...
+              </div>
+            )}
+
             {/* Submit */}
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex items-center justify-center gap-2 bg-purple-600 text-white py-3.5 rounded-xl font-semibold shadow-lg shadow-purple-200 transition hover:bg-purple-700 hover:shadow-xl active:scale-[0.99] disabled:opacity-60"
+              className="w-full flex items-center justify-center gap-2 bg-purple-600 text-white py-3.5 rounded-xl font-semibold shadow-lg shadow-purple-200 transition hover:bg-purple-700 hover:shadow-xl active:scale-[0.99] disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              {loading ? "Creating..." : "Create Account"}
-              <ArrowRight className="w-5 h-5" />
+              {loading ? (
+                <>
+                  <LoaderCircle className="w-5 h-5 animate-spin" />
+                  Creating Account...
+                </>
+              ) : (
+                <>
+                  Create Account
+                  <ArrowRight className="w-5 h-5" />
+                </>
+              )}
             </button>
 
           </form>
